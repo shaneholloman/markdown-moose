@@ -113,11 +113,11 @@ Plugins are loaded automatically from the `src/plugins` directory. Each plugin s
 
 ## License
 
-ISC
+MIT
 
 ## Author
 
-Your Name
+Shane Holloman
 
 ---
 

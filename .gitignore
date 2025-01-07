@@ -48,3 +48,5 @@ coverage/
 .env
 .env.local
 .env.*.local
+
+.history/
