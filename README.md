@@ -2,21 +2,34 @@
 
 Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It uses a plugin-based architecture where each feature is a plugin that can be loaded by the extension.
 
-## Features
+## Features Added
 
-### 📥 Image Downloader Plugin (Built-in)
+### 📥 Image Downloader Plugin
 
 - Automatically downloads images from your Markdown files
 - Saves images locally in the same directory as your Markdown file
 - Updates image links to use relative paths
 - Shows download progress with a sleek progress indicator
 
+### 🔤 Image Alt Plugin
+
+- Automatically generates meaningful alt text for images based on context
+- Uses nearest heading above the image as alt text
+- Falls back to page title or file type if no nearby heading
+- Handles duplicate images with numbered alt texts
+- Configurable to preserve or overwrite existing alt text
+
+### 📝 More Plugins Coming Soon
+
+Please feel free to suggest new features or create your own plugins.
+
 ## Usage
 
 1. Open a Markdown file
 2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-3. Type "Moose" and select "Moose: Download Images from Markdown"
-4. Watch as Markdown Moose downloads your images and updates the links
+3. Type "Moose" to see available commands:
+   - Select "Moose: Download Images from Markdown" to download and organize images
+   - Select "Moose: Update Image Alt Text" to generate contextual alt text for images
 
 ## Configuration
 
@@ -35,6 +48,9 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
          "overwriteExisting": true,
          "skipLargeImages": true,
          "maxImageSize": 10485760
+       },
+       "imageAlt": {
+         "overwriteExisting": false
        }
      }
      ```
@@ -50,7 +66,8 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
        "moose.imageDownloader.path": "./img",
        "moose.imageDownloader.overwriteExisting": true,
        "moose.imageDownloader.skipLargeImages": false,
-       "moose.imageDownloader.maxImageSize": 5242880
+       "moose.imageDownloader.maxImageSize": 5242880,
+       "moose.imageAlt.overwriteExisting": false
      }
      ```
 
@@ -60,7 +77,9 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
    - Search for "Markdown Moose"
    - Configure available settings
 
-### Image Downloader Settings
+### Plugin Settings
+
+#### Image Downloader Settings
 
 - `path`: Where to save downloaded images (relative to markdown file)
   - Default: "./img"
@@ -78,6 +97,12 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
   - Default: 5242880 (5MB)
   - Only used when skipLargeImages is true
 
+#### Image Alt Settings
+
+- `overwriteExisting`: Whether to overwrite existing alt text
+  - Default: false
+  - Set to true to update all images regardless of existing alt text
+
 Notes:
 
 - Paths should be relative to the markdown file
@@ -88,7 +113,7 @@ Notes:
 
 Markdown Moose (the Extension) is built with extensibility in mind. The core extension acts as a host that can load multiple plugins. Each plugin adds specific features to enhance your Markdown editing experience.
 
-For example, the Image Downloader plugin (which comes built-in) adds the ability to download and manage images in your markdown files. You can create your own plugins to add more features to the extension.
+For example, the Image Downloader plugin adds the ability to download and manage images in your markdown files. You can create your own plugins to add more features to the extension.
 
 ### Creating a Plugin
 
