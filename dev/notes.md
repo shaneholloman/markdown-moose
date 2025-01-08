@@ -1,6 +1,6 @@
 # Notes
 
-![markdown-moose-logo](assets/markdown-moose-logo.svg)
+![markdown-moose-logo](../assets/markdown-moose-logo.svg)
 
 There's two versions of this plugin. The simple one is called: Markdown Image Downloader. The more complicated one is called Markdown Suite. Markdown Suite is the one that I'm working on. Moving forward. I need to write a complete README for how to set up the development environment for this plugin. Well, actually for both of them. This needs to include dependency installs. When to compile? How to debug? And let's try and include the skeleton setup PowerShell script.
 
