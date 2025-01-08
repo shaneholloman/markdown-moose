@@ -1,12 +1,12 @@
 # Markdown Moose 🦌
 
-A powerful, extensible VSCode extension for enhancing your Markdown workflow through a plugin-based architecture.
+Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It uses a plugin-based architecture where each feature is a plugin that can be loaded by the extension.
 
 ![Markdown Moose Logo](icon.png)
 
 ## Features
 
-### 📥 Image Downloader (Built-in Plugin)
+### 📥 Image Downloader Plugin (Built-in)
 
 - Automatically downloads images from your Markdown files
 - Saves images locally in the same directory as your Markdown file
@@ -17,12 +17,46 @@ A powerful, extensible VSCode extension for enhancing your Markdown workflow thr
 
 1. Open a Markdown file
 2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-3. Type "Download Images" and select "Download Images from Markdown"
+3. Type "Moose" and select "Moose: Download Images from Markdown"
 4. Watch as Markdown Moose downloads your images and updates the links
+
+## Configuration
+
+You can configure where images are downloaded using one of these methods (in order of priority):
+
+1. `.moose` config file in workspace root:
+
+   ```json
+   {
+     "imageDownloader": {
+       "path": "./img"
+     }
+   }
+   ```
+
+2. Workspace settings (`.vscode/settings.json`):
+
+   ```json
+   {
+     "moose.imageDownloader.path": "./img"
+   }
+   ```
+
+3. VSCode User Settings:
+   - Go to Settings (Ctrl+,)
+   - Search for "Markdown Moose"
+   - Set "Image Downloader Path"
+
+The path should be relative to the markdown file (e.g., "./img", "./assets/images", ".").
+If a directory doesn't exist, it will be created automatically.
+
+Default path: "./img"
 
 ## Plugin Architecture
 
-Markdown Moose is built with extensibility in mind. The core extension is a plugin host that can load multiple plugins to enhance your Markdown editing experience.
+Markdown Moose (the Extension) is built with extensibility in mind. The core extension acts as a host that can load multiple plugins. Each plugin adds specific features to enhance your Markdown editing experience.
+
+For example, the Image Downloader plugin (which comes built-in) adds the ability to download and manage images in your markdown files. You can create your own plugins to add more features to the extension.
 
 ### Creating a Plugin
 
@@ -121,4 +155,4 @@ Shane Holloman
 
 ---
 
-🦌 Happy Markdown editing with Markdown Moose!
+🦌 Happy Markdown editing with the Moose!

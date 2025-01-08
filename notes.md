@@ -13,6 +13,3 @@ This version of the plugin uses a modular architecture in that we can make a plu
 This this version of the plugin. It was really just a proof of concept. It works, but it is being deprecated for Markdown Suite.
 
 ## TODO
-
-- [ ] Rename Markdown Suite to Markdown Moose. This is a better name. It's more fun. It's more memorable.
-- [x] Create a Markdown Moose logo.

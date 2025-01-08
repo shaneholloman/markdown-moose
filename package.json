@@ -2,7 +2,7 @@
   "name": "markdown-moose",
   "displayName": "Markdown Moose",
   "description": "A powerful, extensible Markdown toolkit with plugin support for enhanced workflow",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -26,9 +26,19 @@
     "commands": [
       {
         "command": "markdown-moose.downloadImages",
-        "title": "Download Images from Markdown"
+        "title": "Moose: Download Images from Markdown"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Markdown Moose",
+      "properties": {
+        "moose.imageDownloader.path": {
+          "type": "string",
+          "default": "./img",
+          "description": "Default path for downloaded images (relative to markdown file)"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

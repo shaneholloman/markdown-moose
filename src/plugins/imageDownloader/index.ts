@@ -14,6 +14,7 @@ import * as fs from 'fs/promises';
 import fetch from 'node-fetch';
 import { Plugin, Command } from '../../types';
 import { CleanUrl } from './types';
+import { getImageDownloadPath, ensureImageDirectory } from '../../utils/config';
 
 export class ImageDownloader implements Plugin {
     public name = 'Markdown Moose Image Downloader';
@@ -126,13 +127,13 @@ export class ImageDownloader implements Plugin {
         console.log('downloadImages called');
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
-            vscode.window.showErrorMessage('No active editor');
+            vscode.window.showErrorMessage('Moose: No active editor');
             return;
         }
 
         const document = editor.document;
         if (document.languageId !== 'markdown') {
-            vscode.window.showErrorMessage('Active file is not markdown');
+            vscode.window.showErrorMessage('Moose: Active file is not markdown');
             return;
         }
 
@@ -140,17 +141,22 @@ export class ImageDownloader implements Plugin {
         const imageUrls = this.extractImageUrls(text);
 
         if (imageUrls.length === 0) {
-            vscode.window.showInformationMessage('No images found in markdown');
+            vscode.window.showInformationMessage('Moose: No images found in markdown');
             return;
         }
 
         console.log('Found image URLs:', imageUrls);
         const documentDir = path.dirname(document.uri.fsPath);
+
+        // Get configured image path and ensure directory exists
+        const configuredPath = await getImageDownloadPath(document);
+        const imagePath = await ensureImageDirectory(documentDir, configuredPath);
+
         let downloaded = 0;
 
         await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
-            title: "Downloading Images",
+            title: "Moose: Downloading Images",
             cancellable: false
         }, async (progress) => {
             const increment = 100 / imageUrls.length;
@@ -161,14 +167,17 @@ export class ImageDownloader implements Plugin {
                     increment
                 });
                 try {
-                    const destPath = path.join(documentDir, filename);
+                    const destPath = path.join(documentDir, imagePath, filename);
                     await this.downloadImage(imageUrl, destPath);
                     downloaded++;
 
                     const edit = new vscode.WorkspaceEdit();
                     const content = document.getText();
                     // Simple URL replacement
-                    const newContent = content.replace(imageUrl, `./${filename}`);
+                    const newContent = content.replace(
+                        imageUrl,
+                        imagePath === '.' ? `./${filename}` : `${imagePath}/${filename}`
+                    );
 
                     edit.replace(
                         document.uri,
@@ -182,12 +191,12 @@ export class ImageDownloader implements Plugin {
 
                 } catch (error) {
                     console.error(`Failed to download ${imageUrl}:`, error);
-                    vscode.window.showErrorMessage(`Failed to download ${imageUrl}`);
+                    vscode.window.showErrorMessage(`Moose: Failed to download ${imageUrl}`);
                 }
             }
         });
 
-        vscode.window.showInformationMessage(`Downloaded ${downloaded} images`);
+        vscode.window.showInformationMessage(`Moose: Downloaded ${downloaded} images`);
     }
 }
 
