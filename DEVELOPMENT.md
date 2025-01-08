@@ -9,8 +9,78 @@
 **Plugins** are modular features that add functionality to the Markdown Moose extension. For example, the Image Downloader is a plugin that adds image downloading capabilities. Plugins are:
 
 - Self-contained modules
-- Loaded automatically by the extension
 - Each responsible for a specific feature set
+- Currently require manual registration (see Plugin Loading System below)
+
+### Plugin Loading System
+
+**Current Implementation**:
+The plugin system currently requires manual registration in `src/plugins/index.ts`. While plugins are modular and self-contained, they are not yet truly "drop-in". Adding a new plugin requires:
+
+1. Creating the plugin files in `src/plugins/your-plugin-name/`
+2. Registering the plugin in `src/plugins/index.ts`:
+
+   ```typescript
+   try {
+       log('Loading my plugin...');
+       const myPlugin = require('./my-plugin-name').default;
+       if (isValidPlugin(myPlugin)) {
+           plugins.push(myPlugin);
+       }
+   } catch (error) {
+       // Error handling
+   }
+   ```
+
+3. Adding command and setting contributions to `package.json`:
+
+   ```json
+   {
+     "contributes": {
+       "commands": [
+         {
+           "command": "markdown-moose.myCommand",
+           "title": "Moose: My Command"
+         }
+       ],
+       "configuration": {
+         "properties": {
+           "moose.myPlugin.setting": {
+             "type": "string",
+             "default": "value",
+             "description": "Description"
+           }
+         }
+       }
+     }
+   }
+   ```
+
+**Future Goals**:
+The architecture is designed with the goal of evolving into a true drop-in system where:
+
+- Plugins can be added by simply placing them in the plugins directory
+- No manual registration would be required
+- Dynamic discovery and loading of plugins
+- Hot-reloading of plugins during development
+
+This vision requires significant architectural work, including:
+
+- Dynamic plugin discovery system
+- Plugin manifest format
+- Dependency management
+- Security sandboxing
+- Version compatibility checking
+
+We welcome contributions towards achieving this vision! Areas where help is needed:
+
+- Plugin discovery system design
+- Manifest format specification
+- Hot-reload implementation
+- Plugin isolation strategies
+- Testing framework for plugins
+
+Until we achieve this, follow the current process for adding new plugins as documented in this guide.
 
 The relationship is hierarchical:
 
@@ -267,8 +337,14 @@ The new VSCode window that opens is called the "Extension Development Host":
 2. Build, package, and install for testing (all-in-one command):
 
    ```sh
-   npm run compile && vsce package && del releases\markdown-moose-0.2.0.vsix && move markdown-moose-0.2.0.vsix releases\ && code --install-extension ./releases/markdown-moose-0.2.0.vsix
+   npm run compile && vsce package && del releases\markdown-moose-0.2.1.vsix && move markdown-moose-0.2.1.vsix releases\ && code --install-extension ./releases/markdown-moose-0.2.1.vsix
    ```
+
+   Just the build and package:
+
+   ```sh
+    npm run compile && vsce package
+    ```
 
    This command:
    - Compiles TypeScript using webpack
@@ -312,7 +388,7 @@ To modify package contents, edit .vscodeignore.
 ### Installing the Packaged Extension
 
 ```powershell
-npm run compile; vsce package; Remove-Item -ErrorAction SilentlyContinue .\releases\markdown-moose-0.2.0.vsix; Move-Item -Force markdown-moose-0.2.0.vsix .\releases\; code --install-extension .\releases\markdown-moose-0.2.0.vsix
+npm run compile; vsce package; Remove-Item -ErrorAction SilentlyContinue .\releases\markdown-moose-0.2.1.vsix; Move-Item -Force markdown-moose-0.2.1.vsix .\releases\; code --install-extension .\releases\markdown-moose-0.2.1.vsix
 ```
 
 To test the packaged .vsix file:
@@ -322,14 +398,14 @@ To test the packaged .vsix file:
    - Go to Extensions view (Ctrl+Shift+X)
    - Click "..." (More Actions) at the top
    - Select "Install from VSIX..."
-   - Navigate to `releases/markdown-moose-0.2.0.vsix`
+   - Navigate to `releases/markdown-moose-0.2.1.vsix`
    - Click "Install"
    - Reload VSCode when prompted
 
 2. Using Command Line:
 
    ```sh
-   code --install-extension releases/markdown-moose-0.2.0.vsix
+   code --install-extension releases/markdown-moose-0.2.1.vsix
    ```
 
    Then reload VSCode.

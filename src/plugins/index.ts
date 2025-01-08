@@ -10,6 +10,8 @@ export function loadPlugins(extensionPath?: string, outputChannel?: vscode.Outpu
 
     log('Loading plugins...');
     const plugins: Plugin[] = [];
+
+    // Load image downloader plugin
     try {
         log('Loading image downloader plugin...');
         const imageDownloaderPlugin = require('./imageDownloader').default;
@@ -24,6 +26,29 @@ export function loadPlugins(extensionPath?: string, outputChannel?: vscode.Outpu
         }
     } catch (error) {
         const errorMessage = `Failed to load image downloader plugin: ${error}`;
+        outputChannel?.appendLine(`ERROR: ${errorMessage}`);
+        log(errorMessage);
+
+        if (error instanceof Error) {
+            outputChannel?.appendLine(`Stack trace: ${error.stack}`);
+        }
+    }
+
+    // Load image alt plugin
+    try {
+        log('Loading image alt plugin...');
+        const imageAltPlugin = require('./imageAlt').default;
+
+        if (isValidPlugin(imageAltPlugin)) {
+            log(`Plugin ${imageAltPlugin.name} is valid, adding to list`);
+            plugins.push(imageAltPlugin);
+        } else {
+            const error = 'Invalid image alt plugin';
+            outputChannel?.appendLine(`ERROR: ${error}`);
+            log(error);
+        }
+    } catch (error) {
+        const errorMessage = `Failed to load image alt plugin: ${error}`;
         outputChannel?.appendLine(`ERROR: ${errorMessage}`);
         log(errorMessage);
 

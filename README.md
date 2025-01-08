@@ -23,6 +23,7 @@ Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It us
 Markdown Moose uses a three-tier configuration system (in order of priority):
 
 1. `.moose` Config File (Highest Priority):
+
    - JSON file in workspace root
    - Settings grouped by plugin name
    - Example:
@@ -39,6 +40,7 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
      ```
 
 2. Workspace Settings (Medium Priority):
+
    - In `.vscode/settings.json`
    - Settings prefixed with "moose.[pluginName]"
    - Example:
@@ -53,6 +55,7 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
      ```
 
 3. VSCode User Settings (Low Priority):
+
    - Go to Settings (Ctrl+,)
    - Search for "Markdown Moose"
    - Configure available settings
@@ -156,16 +159,60 @@ For example, the Image Downloader plugin (which comes built-in) adds the ability
     export default new MyPlugin();
     ```
 
-3. The plugin will be automatically loaded by the extension
+3. Register your plugin (see Current Implementation below)
 
-### Plugin Loading
+### Plugin System: Current State & Future Vision
 
-Plugins are loaded automatically from the `src/plugins` directory. Each plugin should:
+#### Current Implementation
 
-- Be in its own directory
-- Export a default instance of a class implementing the Plugin interface
-- Register its commands in the activate method
-- Clean up resources in the deactivate method if needed
+Plugins currently require manual registration in the codebase. To add a new plugin:
+
+1. Create your plugin directory in `src/plugins/your-plugin-name/`
+2. Implement the Plugin interface in your main file (e.g., `index.ts`)
+3. Register the plugin in `src/plugins/index.ts`
+4. Add command and setting contributions to `package.json`
+
+Example plugin registration in `src/plugins/index.ts`:
+
+```typescript
+try {
+    log('Loading my plugin...');
+    const myPlugin = require('./my-plugin-name').default;
+    if (isValidPlugin(myPlugin)) {
+        plugins.push(myPlugin);
+    }
+} catch (error) {
+    // Error handling
+}
+```
+
+#### Future Vision: True Drop-in Architecture
+
+We are working towards a true drop-in plugin architecture where:
+
+- Plugins can be added by simply placing them in a plugins directory
+- No manual registration or code changes required
+- Dynamic discovery and loading of plugins
+- Hot-reloading during development
+- Proper isolation and versioning
+
+This vision requires significant architectural work, including:
+
+- Dynamic plugin discovery system
+- Plugin manifest format
+- Dependency management
+- Security sandboxing
+- Version compatibility checking
+
+#### Help Us Get There
+
+We welcome contributions towards achieving this vision. Areas where help is needed:
+
+- Plugin discovery system design
+- Manifest format specification
+- Hot-reload implementation
+- Plugin isolation strategies
+- Testing framework for plugins
 
 ## Contributing
 

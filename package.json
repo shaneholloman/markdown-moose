@@ -2,7 +2,7 @@
   "name": "markdown-moose",
   "displayName": "Markdown Moose",
   "description": "A powerful, extensible Markdown toolkit with plugin support for enhanced workflow",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -26,6 +26,10 @@
       {
         "command": "markdown-moose.downloadImages",
         "title": "Moose: Download Images from Markdown"
+      },
+      {
+        "command": "markdown-moose.updateImageAlts",
+        "title": "Moose: Update Image Alt Text"
       }
     ],
     "configuration": {
@@ -52,6 +56,11 @@
           "default": 5242880,
           "description": "Maximum image size in bytes (when skipLargeImages is true)",
           "minimum": 0
+        },
+        "moose.imageAlt.overwriteExisting": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to overwrite existing alt text"
         }
       }
     }

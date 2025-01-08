@@ -69,6 +69,14 @@ MCP Integration:
 - Follow server-specific input schemas
 - Respect rate limits and quotas
 
+VSCode Extension Development:
+
+- Never use `code --extensionDevelopmentPath=.` for testing
+- Use F5 in VSCode for development testing (launches Extension Development Host)
+- Use .vsix packaging and installation for production testing
+- Always verify extension activation in Output panel
+- Test commands through Command Palette
+
 Remember to:
 
 - Create backups before making changes
