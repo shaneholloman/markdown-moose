@@ -14,33 +14,87 @@ import * as fs from 'fs/promises';
 import fetch from 'node-fetch';
 import { Plugin, Command } from '../../types';
 import { CleanUrl } from './types';
-import { getImageDownloadPath, ensureImageDirectory } from '../../utils/config';
+import { PluginSettings } from '../../types/settings';
+import { getSetting } from '../../utils/settings-loader';
+import { getImageDownloadPath, ensureImageDirectory } from '../../utils/image-utils';
 
 export class ImageDownloader implements Plugin {
-    public name = 'Markdown Moose Image Downloader';
+    public name = 'imageDownloader';  // Match the settings namespace in package.json
     public description = 'Downloads remote images from markdown files to local directory and updates links automatically';
     public version = '1.0.0';
     public author = 'Shane Holloman';
     public commands: Command[];
+    public settings: PluginSettings;
+    private outputChannel?: vscode.OutputChannel;
+
+    private log(message: string) {
+        console.log(message);
+        this.outputChannel?.appendLine(message);
+    }
 
     constructor() {
+        // Ensure proper binding of methods
+        this.downloadImages = this.downloadImages.bind(this);
+
         this.commands = [
             {
                 id: 'markdown-moose.downloadImages',
                 title: 'Download Images from Markdown',
-                execute: this.downloadImages.bind(this)
+                execute: this.downloadImages
             }
         ];
+
+        this.settings = {
+            path: {
+                type: 'string',
+                default: './img',
+                description: 'Default path for downloaded images (relative to markdown file)',
+                pattern: '^[^/\\\\].*$', // Must be relative path
+            },
+            overwriteExisting: {
+                type: 'boolean',
+                default: true,
+                description: 'Whether to overwrite existing images'
+            },
+            skipLargeImages: {
+                type: 'boolean',
+                default: false,
+                description: 'Skip downloading images larger than maxImageSize'
+            },
+            maxImageSize: {
+                type: 'number',
+                default: 5242880, // 5MB
+                description: 'Maximum image size in bytes (when skipLargeImages is true)',
+                minimum: 0
+            }
+        };
     }
 
     public activate(context: vscode.ExtensionContext): void {
+        // Get the shared output channel
+        this.outputChannel = vscode.window.createOutputChannel('Markdown Moose');
+        context.subscriptions.push(this.outputChannel);
+
+        this.log('Activating Image Downloader plugin...');
         for (const command of this.commands) {
-            const disposable = vscode.commands.registerCommand(
-                command.id,
-                command.execute
-            );
-            context.subscriptions.push(disposable);
+            this.log(`Registering command: ${command.id}`);
+            try {
+                const disposable = vscode.commands.registerCommand(
+                    command.id,
+                    this.downloadImages  // Use bound method directly
+                );
+                context.subscriptions.push(disposable);
+                this.log(`Successfully registered command: ${command.id}`);
+            } catch (error) {
+                const errorMessage = `Failed to register command ${command.id}: ${error}`;
+                this.outputChannel?.appendLine(`ERROR: ${errorMessage}`);
+                if (error instanceof Error) {
+                    this.outputChannel?.appendLine(`Stack trace: ${error.stack}`);
+                }
+                throw error; // Re-throw to ensure activation fails properly
+            }
         }
+        this.log('Image Downloader plugin activated successfully');
     }
 
     public deactivate(): void {
@@ -75,7 +129,8 @@ export class ImageDownloader implements Plugin {
                 filename: decodeURIComponent(filename)
             };
         } catch (e) {
-            console.error('Error parsing URL:', url, e);
+            const errorMessage = `Error parsing URL ${url}: ${e}`;
+            this.outputChannel?.appendLine(`ERROR: ${errorMessage}`);
             return null;
         }
     }
@@ -103,18 +158,61 @@ export class ImageDownloader implements Plugin {
      * @param destPath - The local file system path to save the image to
      * @throws Error if download fails or file cannot be written
      */
-    private async downloadImage(url: string, destPath: string): Promise<void> {
-        console.log('Downloading image from:', url);
-        console.log('Saving to:', destPath);
+    private async downloadImage(url: string, destPath: string, document: vscode.TextDocument): Promise<void> {
+        this.log(`Downloading image from: ${url}`);
+        this.log(`Saving to: ${destPath}`);
 
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Failed to download image: ${response.statusText}`);
         }
 
-        const buffer = await response.buffer();
-        await fs.writeFile(destPath, buffer);
-        console.log('Successfully downloaded and saved image');
+        // Check file size if skipLargeImages is enabled
+        const skipLargeImages = await getSetting<boolean>(
+            'imageDownloader',
+            'skipLargeImages',
+            document,
+            false
+        );
+
+        if (skipLargeImages) {
+            const maxSize = await getSetting<number>(
+                'imageDownloader',
+                'maxImageSize',
+                document,
+                5242880
+            );
+
+            const contentLength = parseInt(response.headers.get('content-length') || '0', 10);
+            if (contentLength > maxSize) {
+                throw new Error(`Image size (${contentLength} bytes) exceeds maximum allowed size (${maxSize} bytes)`);
+            }
+        }
+
+        // Check if file exists and overwrite setting
+        const overwriteExisting = await getSetting<boolean>(
+            'imageDownloader',
+            'overwriteExisting',
+            document,
+            true
+        );
+
+        try {
+            await fs.access(destPath);
+            if (!overwriteExisting) {
+                throw new Error('File exists and overwrite is disabled');
+            }
+        } catch (error: any) {
+            // File doesn't exist, which is fine
+            if (error.message !== 'File exists and overwrite is disabled') {
+                // Create the file
+                const buffer = await response.buffer();
+                await fs.writeFile(destPath, buffer);
+                this.log('Successfully downloaded and saved image');
+            } else {
+                throw error;
+            }
+        }
     }
 
     /**
@@ -124,7 +222,7 @@ export class ImageDownloader implements Plugin {
      * @throws Error if no active editor or document is not markdown
      */
     public async downloadImages(): Promise<void> {
-        console.log('downloadImages called');
+        this.log('downloadImages called');
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage('Moose: No active editor');
@@ -145,12 +243,20 @@ export class ImageDownloader implements Plugin {
             return;
         }
 
-        console.log('Found image URLs:', imageUrls);
+        this.log(`Found image URLs: ${JSON.stringify(imageUrls, null, 2)}`);
         const documentDir = path.dirname(document.uri.fsPath);
 
         // Get configured image path and ensure directory exists
         const configuredPath = await getImageDownloadPath(document);
         const imagePath = await ensureImageDirectory(documentDir, configuredPath);
+
+        // Get plugin settings
+        const skipLargeImages = await getSetting<boolean>(
+            'imageDownloader',
+            'skipLargeImages',
+            document,
+            false
+        );
 
         let downloaded = 0;
 
@@ -168,7 +274,7 @@ export class ImageDownloader implements Plugin {
                 });
                 try {
                     const destPath = path.join(documentDir, imagePath, filename);
-                    await this.downloadImage(imageUrl, destPath);
+                    await this.downloadImage(imageUrl, destPath, document);
                     downloaded++;
 
                     const edit = new vscode.WorkspaceEdit();
@@ -190,7 +296,8 @@ export class ImageDownloader implements Plugin {
                     await vscode.workspace.applyEdit(edit);
 
                 } catch (error) {
-                    console.error(`Failed to download ${imageUrl}:`, error);
+                    const errorMessage = `Failed to download ${imageUrl}: ${error}`;
+                    this.outputChannel?.appendLine(`ERROR: ${errorMessage}`);
                     vscode.window.showErrorMessage(`Moose: Failed to download ${imageUrl}`);
                 }
             }

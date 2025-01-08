@@ -1,26 +1,34 @@
 // src/plugins/index.ts
-import * as fs from 'fs';
-import * as path from 'path';
+import * as vscode from 'vscode';
 import { Plugin } from '../types';
 
-export function loadPlugins(): Plugin[] {
-    const pluginsDir = path.join(__dirname);
-    const items = fs.readdirSync(pluginsDir);
+export function loadPlugins(extensionPath?: string, outputChannel?: vscode.OutputChannel): Plugin[] {
+    const log = (message: string) => {
+        console.log(message);
+        outputChannel?.appendLine(message);
+    };
+
+    log('Loading plugins...');
     const plugins: Plugin[] = [];
+    try {
+        log('Loading image downloader plugin...');
+        const imageDownloaderPlugin = require('./imageDownloader').default;
 
-    for (const item of items) {
-        if (item === 'index.ts' || item === 'index.js') continue;
+        if (isValidPlugin(imageDownloaderPlugin)) {
+            log(`Plugin ${imageDownloaderPlugin.name} is valid, adding to list`);
+            plugins.push(imageDownloaderPlugin);
+        } else {
+            const error = 'Invalid image downloader plugin';
+            outputChannel?.appendLine(`ERROR: ${error}`);
+            log(error);
+        }
+    } catch (error) {
+        const errorMessage = `Failed to load image downloader plugin: ${error}`;
+        outputChannel?.appendLine(`ERROR: ${errorMessage}`);
+        log(errorMessage);
 
-        const pluginDir = path.join(pluginsDir, item);
-        if (fs.statSync(pluginDir).isDirectory()) {
-            try {
-                const plugin = require(path.join(pluginDir, 'index')).default;
-                if (isValidPlugin(plugin)) {
-                    plugins.push(plugin);
-                }
-            } catch (error) {
-                console.error(`Failed to load plugin from ${pluginDir}:`, error);
-            }
+        if (error instanceof Error) {
+            outputChannel?.appendLine(`Stack trace: ${error.stack}`);
         }
     }
 

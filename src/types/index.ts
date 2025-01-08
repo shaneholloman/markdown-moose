@@ -1,5 +1,6 @@
 // src/types/index.ts
 import * as vscode from 'vscode';
+import { PluginSettings } from './settings';
 
 // Core plugin interface - what every plugin must implement
 export interface Plugin {
@@ -8,6 +9,7 @@ export interface Plugin {
     version: string;
     author?: string;
     commands: Command[];
+    settings?: PluginSettings;  // New: Plugin settings definitions
     activate: (context: vscode.ExtensionContext) => void;
     deactivate: () => void;
 }

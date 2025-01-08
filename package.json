@@ -2,7 +2,7 @@
   "name": "markdown-moose",
   "displayName": "Markdown Moose",
   "description": "A powerful, extensible Markdown toolkit with plugin support for enhanced workflow",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -20,8 +20,11 @@
     "toolkit",
     "workflow"
   ],
-  "activationEvents": [],
-  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:markdown",
+    "*"
+  ],
+  "main": "dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -35,15 +38,32 @@
         "moose.imageDownloader.path": {
           "type": "string",
           "default": "./img",
-          "description": "Default path for downloaded images (relative to markdown file)"
+          "description": "Default path for downloaded images (relative to markdown file)",
+          "pattern": "^[^/\\\\].*$"
+        },
+        "moose.imageDownloader.overwriteExisting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to overwrite existing images"
+        },
+        "moose.imageDownloader.skipLargeImages": {
+          "type": "boolean",
+          "default": false,
+          "description": "Skip downloading images larger than maxImageSize"
+        },
+        "moose.imageDownloader.maxImageSize": {
+          "type": "number",
+          "default": 5242880,
+          "description": "Maximum image size in bytes (when skipLargeImages is true)",
+          "minimum": 0
         }
       }
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "webpack",
+    "watch": "webpack --watch",
     "convert-icon": "node scripts/convert-icon.js"
   },
   "publisher": "shaneholloman",
@@ -59,8 +79,12 @@
     "@types/node": "^16.18.34",
     "@types/node-fetch": "^2.6.12",
     "@types/vscode": "^1.85.0",
+    "@types/webpack": "^5.28.5",
     "sharp": "^0.33.5",
-    "typescript": "^5.1.3"
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.1.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
   },
   "author": "Shane Holloman",
   "license": "ISC",

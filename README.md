@@ -2,7 +2,7 @@
 
 Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It uses a plugin-based architecture where each feature is a plugin that can be loaded by the extension.
 
-![Markdown Moose Logo](icon.png)
+![Markdown Moose Logo](./icon.png)
 
 ## Features
 
@@ -22,35 +22,66 @@ Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It us
 
 ## Configuration
 
-You can configure where images are downloaded using one of these methods (in order of priority):
+Markdown Moose uses a three-tier configuration system (in order of priority):
 
-1. `.moose` config file in workspace root:
+1. `.moose` Config File (Highest Priority):
+   - JSON file in workspace root
+   - Settings grouped by plugin name
+   - Example:
 
-   ```json
-   {
-     "imageDownloader": {
-       "path": "./img"
+     ```json
+     {
+       "imageDownloader": {
+         "path": "./img",
+         "overwriteExisting": true,
+         "skipLargeImages": true,
+         "maxImageSize": 10485760
+       }
      }
-   }
-   ```
+     ```
 
-2. Workspace settings (`.vscode/settings.json`):
+2. Workspace Settings (Medium Priority):
+   - In `.vscode/settings.json`
+   - Settings prefixed with "moose.[pluginName]"
+   - Example:
 
-   ```json
-   {
-     "moose.imageDownloader.path": "./img"
-   }
-   ```
+     ```json
+     {
+       "moose.imageDownloader.path": "./img",
+       "moose.imageDownloader.overwriteExisting": true,
+       "moose.imageDownloader.skipLargeImages": false,
+       "moose.imageDownloader.maxImageSize": 5242880
+     }
+     ```
 
-3. VSCode User Settings:
+3. VSCode User Settings (Low Priority):
    - Go to Settings (Ctrl+,)
    - Search for "Markdown Moose"
-   - Set "Image Downloader Path"
+   - Configure available settings
 
-The path should be relative to the markdown file (e.g., "./img", "./assets/images", ".").
-If a directory doesn't exist, it will be created automatically.
+### Image Downloader Settings
 
-Default path: "./img"
+- `path`: Where to save downloaded images (relative to markdown file)
+  - Default: "./img"
+  - Examples: "./assets/images", ".", "./downloads"
+
+- `overwriteExisting`: Whether to overwrite existing images
+  - Default: true
+  - Set to false to skip existing files
+
+- `skipLargeImages`: Whether to skip large image downloads
+  - Default: false
+  - Works with maxImageSize setting
+
+- `maxImageSize`: Maximum allowed image size in bytes
+  - Default: 5242880 (5MB)
+  - Only used when skipLargeImages is true
+
+Notes:
+
+- Paths should be relative to the markdown file
+- Directories are created automatically if they don't exist
+- Higher priority settings override lower priority ones
 
 ## Plugin Architecture
 

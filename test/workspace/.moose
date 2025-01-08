@@ -1,6 +1,6 @@
 {
   "imageDownloader": {
-    "path": "./test-images",
+    "path": "./workspace-images",
     "overwriteExisting": true,
     "skipLargeImages": true,
     "maxImageSize": 10485760

@@ -22,6 +22,101 @@ Markdown Moose (Extension)
     └── Other Plugins...
 ```
 
+## Plugin Settings System
+
+### Settings Hierarchy
+
+Markdown Moose implements a three-tier settings system with clear precedence:
+
+1. `.moose` Config File (Highest Priority)
+   - JSON file in workspace root
+   - Settings grouped by plugin name
+   - Overrides all other settings
+   - Example:
+
+     ```json
+     {
+       "imageDownloader": {
+         "path": "./images",
+         "overwriteExisting": true
+       }
+     }
+     ```
+
+2. VSCode Workspace/User Settings (Medium Priority)
+   - Standard VSCode settings
+   - Settings prefixed with "moose.[pluginName]"
+   - Example:
+
+     ```json
+     {
+       "moose.imageDownloader.path": "./images",
+       "moose.imageDownloader.overwriteExisting": true
+     }
+     ```
+
+3. Default Values (Lowest Priority)
+   - Defined in plugin's settings definitions
+   - Used when no other settings found
+
+### Implementing Plugin Settings
+
+1. Define Settings in Plugin:
+
+   ```typescript
+   export class MyPlugin implements Plugin {
+       public name = 'myPlugin';  // Used as settings namespace
+       public settings: PluginSettings = {
+           mySetting: {
+               type: 'string',
+               default: 'default value',
+               description: 'My setting description',
+               // Optional validations:
+               pattern: '^[a-z]+$',    // Regex pattern for strings
+               minimum: 0,             // For numbers
+               maximum: 100,           // For numbers
+               enum: ['a', 'b', 'c']   // For dropdowns
+           }
+       };
+   }
+   ```
+
+2. Access Settings in Code:
+
+   ```typescript
+   import { getSetting } from '../../utils/settings-loader';
+
+   const value = await getSetting<string>(
+       'myPlugin',      // Plugin name
+       'mySetting',     // Setting key
+       document,        // VSCode document (for workspace settings)
+       'default value'  // Default value
+   );
+   ```
+
+### Best Practices for Plugin Settings
+
+1. Naming:
+   - Use camelCase for setting keys
+   - Make names descriptive and specific
+   - Match VSCode conventions
+
+2. Documentation:
+   - Provide clear descriptions
+   - Document default values
+   - Explain setting interactions
+
+3. Validation:
+   - Use appropriate types
+   - Set reasonable min/max values
+   - Provide patterns for strings
+   - Handle invalid values gracefully
+
+4. Error Handling:
+   - Validate settings before use
+   - Provide clear error messages
+   - Fall back gracefully to defaults
+
 ## Development Workflow
 
 ### 1. Setup Development Environment
@@ -160,53 +255,58 @@ The new VSCode window that opens is called the "Extension Development Host":
 
 ## Building and Packaging
 
-### Building the Extension
+### Building and Testing
 
-1. Install dependencies:
+1. Install dependencies and build tools:
 
    ```sh
    npm install
-   ```
-
-2. Compile TypeScript:
-
-   ```sh
-   npm run compile
-   ```
-
-### Packaging for Release
-
-1. Install vsce (VSCode Extension Manager):
-
-   ```sh
    npm install -g @vscode/vsce
    ```
 
-2. Package the extension:
+2. Build, package, and install for testing (all-in-one command):
 
    ```sh
-   vsce package
+   npm run compile && vsce package && del releases\markdown-moose-0.2.0.vsix && move markdown-moose-0.2.0.vsix releases\ && code --install-extension ./releases/markdown-moose-0.2.0.vsix
    ```
 
-   This creates a .vsix file that can be installed in VSCode.
+   This command:
+   - Compiles TypeScript using webpack
+   - Creates the .vsix package
+   - Moves it to the releases directory
+   - Installs it in VSCode for testing
 
-3. Move to releases directory:
-
-   ```sh
-   mkdir -p releases
-   move *.vsix releases/
-   ```
+3. Verify the installation:
+   - Check extension appears in VSCode
+   - Test commands in Command Palette
+   - Verify functionality works as expected
+   - Check Output panel (View -> Output -> Markdown Moose) for logs
 
 ### Package Contents
 
+The extension uses webpack to bundle all code and dependencies:
+
+- All TypeScript/JavaScript is bundled into a single `dist/extension.js` file
+- Dependencies like node-fetch are included in the bundle
+- Source maps are generated for debugging
+- External VSCode APIs are properly excluded
+
 The .vscodeignore file controls what gets included in the package. Current configuration excludes:
 
-- Source files (included as compiled JS)
-- Test files
-- Development configs
-- Node modules
+- Source files (bundled into dist/extension.js)
+- Test files and configs
+- Development files
+- Node modules (bundled as needed)
 - Documentation files
 
+The webpack configuration ensures:
+
+- Clean output directory before each build
+- Proper CommonJS module format
+- Development vs production builds
+- Dependency bundling
+
+To modify bundling behavior, edit webpack.config.js.
 To modify package contents, edit .vscodeignore.
 
 ### Installing the Packaged Extension
@@ -218,14 +318,14 @@ To test the packaged .vsix file:
    - Go to Extensions view (Ctrl+Shift+X)
    - Click "..." (More Actions) at the top
    - Select "Install from VSIX..."
-   - Navigate to `releases/markdown-moose-0.1.0.vsix`
+   - Navigate to `releases/markdown-moose-0.2.0.vsix`
    - Click "Install"
    - Reload VSCode when prompted
 
 2. Using Command Line:
 
    ```sh
-   code --install-extension releases/markdown-moose-0.1.0.vsix
+   code --install-extension releases/markdown-moose-0.2.0.vsix
    ```
 
    Then reload VSCode.

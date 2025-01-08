@@ -1,12 +1,7 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs/promises';
 import * as path from 'path';
-
-interface MooseConfig {
-    imageDownloader: {
-        path: string;
-    };
-}
+import * as fs from 'fs/promises';
+import { getSetting } from './settings-loader';
 
 /**
  * Validates if a path is within the workspace
@@ -41,66 +36,26 @@ export function validateImagePath(basePath: string, imagePath: string): string |
 }
 
 /**
- * Loads and parses the .moose config file if it exists
- * @param workspaceRoot The workspace root path
- * @returns The parsed config or null if file doesn't exist
- */
-async function loadMooseConfig(workspaceRoot: string): Promise<MooseConfig | null> {
-    try {
-        const configPath = path.join(workspaceRoot, '.moose');
-        const content = await fs.readFile(configPath, 'utf8');
-
-        try {
-            return JSON.parse(content);
-        } catch (e) {
-            // Invalid JSON in .moose file
-            vscode.window.showErrorMessage('Invalid JSON in .moose config file. Using workspace settings instead.');
-            return null;
-        }
-    } catch (e) {
-        // File doesn't exist, which is fine
-        return null;
-    }
-}
-
-/**
- * Gets the image download path from various config sources
+ * Gets the configured image download path for a document
  * @param document The current document
  * @returns The resolved image path
  */
 export async function getImageDownloadPath(document: vscode.TextDocument): Promise<string> {
-    const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
     const documentDir = path.dirname(document.uri.fsPath);
+    const configuredPath = await getSetting<string>(
+        'imageDownloader',
+        'path',
+        document,
+        './img'
+    );
 
-    let imagePath = './img'; // Default path
-
-    // Try .moose config first
-    if (workspaceFolder) {
-        const mooseConfig = await loadMooseConfig(workspaceFolder.uri.fsPath);
-        if (mooseConfig?.imageDownloader?.path) {
-            const validPath = validateImagePath(documentDir, mooseConfig.imageDownloader.path);
-            if (validPath) {
-                imagePath = validPath;
-            } else {
-                vscode.window.showWarningMessage('Invalid path in .moose config. Using workspace settings.');
-            }
-        }
+    const validPath = validateImagePath(documentDir, configuredPath);
+    if (validPath) {
+        return validPath;
     }
 
-    // Try workspace/user settings
-    const config = vscode.workspace.getConfiguration('moose.imageDownloader', document.uri);
-    const configPath = config.get<string>('path');
-
-    if (configPath) {
-        const validPath = validateImagePath(documentDir, configPath);
-        if (validPath) {
-            imagePath = validPath;
-        } else {
-            vscode.window.showWarningMessage('Invalid path in settings. Using default "./img".');
-        }
-    }
-
-    return imagePath;
+    console.log('Invalid path in settings, using default "./img"');
+    return './img';
 }
 
 /**
