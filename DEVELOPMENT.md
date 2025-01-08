@@ -311,6 +311,10 @@ To modify package contents, edit .vscodeignore.
 
 ### Installing the Packaged Extension
 
+```powershell
+npm run compile; vsce package; Remove-Item -ErrorAction SilentlyContinue .\releases\markdown-moose-0.2.0.vsix; Move-Item -Force markdown-moose-0.2.0.vsix .\releases\; code --install-extension .\releases\markdown-moose-0.2.0.vsix
+```
+
 To test the packaged .vsix file:
 
 1. Using VSCode UI:

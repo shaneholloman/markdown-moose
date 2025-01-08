@@ -20,10 +20,6 @@
     "toolkit",
     "workflow"
   ],
-  "activationEvents": [
-    "onLanguage:markdown",
-    "*"
-  ],
   "main": "dist/extension.js",
   "contributes": {
     "commands": [

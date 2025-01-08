@@ -1,20 +1,45 @@
+# Development
 .git
 .gitignore
 .github
 .vscode/**
 .vscode-test/**
-out/**
-node_modules/**
+.moose
+.archive/
+.history/
+
+# Source & Build
 src/**
 test/**
 releases/**
 scripts/**
-.moose
-notes.md
+out/**
+node_modules/**
+coverage/
+
+# Config files
 tsconfig.json
 webpack.config.js
 **/tsconfig.json
 **/.eslintrc.json
+.prettierrc
+.editorconfig
+
+# Debug & Logs
 **/*.map
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Source assets (only need final icon.png)
+markdown-moose-logo*.svg
+*.bak
+
+# Development docs
+notes.md
+DEVELOPMENT.md
+
+# TypeScript sources (only need compiled JS)
 **/*.ts
 !dist/**/*.js

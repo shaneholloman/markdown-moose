@@ -2,8 +2,6 @@
 
 Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It uses a plugin-based architecture where each feature is a plugin that can be loaded by the extension.
 
-![Markdown Moose Logo](./icon.png)
-
 ## Features
 
 ### 📥 Image Downloader Plugin (Built-in)

@@ -1,6 +1,6 @@
 {
   "imageDownloader": {
-    "path": "./test-images",
+    "path": "./images",
     "overwriteExisting": true,
     "skipLargeImages": true,
     "maxImageSize": 10485760
