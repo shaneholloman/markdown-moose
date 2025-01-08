@@ -23,6 +23,9 @@ Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It us
 
 Please feel free to suggest new features or create your own plugins.
 
+> [!TIP]
+> Wish list is here: [Markdown Moose Plugin Ideas](dev/ideas.md)
+
 ## Usage
 
 1. Open a Markdown file
