@@ -2,7 +2,7 @@
   "name": "markdown-moose",
   "displayName": "Markdown Moose",
   "description": "A powerful, extensible Markdown toolkit with plugin support for enhanced workflow",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "engines": {
     "vscode": "^1.85.0"
   },
