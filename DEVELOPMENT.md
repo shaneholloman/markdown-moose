@@ -209,6 +209,27 @@ The .vscodeignore file controls what gets included in the package. Current confi
 
 To modify package contents, edit .vscodeignore.
 
+### Installing the Packaged Extension
+
+To test the packaged .vsix file:
+
+1. Using VSCode UI:
+   - Open VSCode
+   - Go to Extensions view (Ctrl+Shift+X)
+   - Click "..." (More Actions) at the top
+   - Select "Install from VSIX..."
+   - Navigate to `releases/markdown-moose-0.1.0.vsix`
+   - Click "Install"
+   - Reload VSCode when prompted
+
+2. Using Command Line:
+
+   ```sh
+   code --install-extension releases/markdown-moose-0.1.0.vsix
+   ```
+
+   Then reload VSCode.
+
 ## Getting Help
 
 - Check existing issues on GitHub
