@@ -43,3 +43,6 @@ DEVELOPMENT.md
 # TypeScript sources (only need compiled JS)
 **/*.ts
 !dist/**/*.js
+dev/**
+assets/**
+.clinerules

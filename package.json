@@ -2,7 +2,7 @@
   "name": "markdown-moose",
   "displayName": "Markdown Moose",
   "description": "A powerful, extensible Markdown toolkit with plugin support for enhanced workflow",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -71,7 +71,7 @@
     "watch": "webpack --watch",
     "convert-icon": "node scripts/convert-icon.js"
   },
-  "publisher": "shaneholloman",
+  "publisher": "warpdeck",
   "repository": {
     "type": "git",
     "url": "https://github.com/shaneholloman/markdown-moose"
