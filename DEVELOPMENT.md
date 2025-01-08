@@ -14,7 +14,7 @@
 
 The relationship is hierarchical:
 
-```
+```txt
 Markdown Moose (Extension)
 └── Plugins
     ├── Image Downloader (Built-in plugin)
@@ -26,7 +26,7 @@ Markdown Moose (Extension)
 
 ### 1. Setup Development Environment
 
-```bash
+```sh
 # Clone the repository
 git clone https://github.com/shaneholloman/markdown-moose
 cd markdown-moose
@@ -157,6 +157,57 @@ The new VSCode window that opens is called the "Extension Development Host":
    - Update README.md for user-facing changes
    - Update DEVELOPMENT.md for developer changes
    - Use JSDoc comments in code
+
+## Building and Packaging
+
+### Building the Extension
+
+1. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+2. Compile TypeScript:
+
+   ```sh
+   npm run compile
+   ```
+
+### Packaging for Release
+
+1. Install vsce (VSCode Extension Manager):
+
+   ```sh
+   npm install -g @vscode/vsce
+   ```
+
+2. Package the extension:
+
+   ```sh
+   vsce package
+   ```
+
+   This creates a .vsix file that can be installed in VSCode.
+
+3. Move to releases directory:
+
+   ```sh
+   mkdir -p releases
+   move *.vsix releases/
+   ```
+
+### Package Contents
+
+The .vscodeignore file controls what gets included in the package. Current configuration excludes:
+
+- Source files (included as compiled JS)
+- Test files
+- Development configs
+- Node modules
+- Documentation files
+
+To modify package contents, edit .vscodeignore.
 
 ## Getting Help
 
