@@ -34,8 +34,8 @@ Please feel free to suggest new features or create your own plugins.
 1. Open a Markdown file
 2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
 3. Type "Moose" to see available commands:
-   - Select "Moose: Download Images from Markdown" to download and organize images
-   - Select "Moose: Update Image Alt Text" to generate contextual alt text for images
+    - Select "Moose: Download Images from Markdown" to download and organize images
+    - Select "Moose: Update Image Alt Text" to generate contextual alt text for images
 
 ## Configuration
 
@@ -43,45 +43,45 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
 
 1. `.moose` Config File (Highest Priority):
 
-   - JSON file in workspace root
-   - Settings grouped by plugin name
-   - Example:
+    - JSON file in workspace root
+    - Settings grouped by plugin name
+    - Example:
 
-     ```json
-     {
-       "imageDownloader": {
-         "path": "./img",
-         "overwriteExisting": true,
-         "skipLargeImages": true,
-         "maxImageSize": 10485760
-       },
-       "imageAlt": {
-         "overwriteExisting": false
-       }
-     }
-     ```
+    ```json
+    {
+      "imageDownloader": {
+        "path": "./img",
+        "overwriteExisting": true,
+        "skipLargeImages": true,
+        "maxImageSize": 10485760
+      },
+      "imageAlt": {
+        "overwriteExisting": false
+      }
+    }
+    ```
 
 2. Workspace Settings (Medium Priority):
 
-   - In `.vscode/settings.json`
-   - Settings prefixed with "moose.[pluginName]"
-   - Example:
+    - In `.vscode/settings.json`
+    - Settings prefixed with "moose.[pluginName]"
+    - Example:
 
-     ```json
-     {
-       "moose.imageDownloader.path": "./img",
-       "moose.imageDownloader.overwriteExisting": true,
-       "moose.imageDownloader.skipLargeImages": false,
-       "moose.imageDownloader.maxImageSize": 5242880,
-       "moose.imageAlt.overwriteExisting": false
-     }
-     ```
+    ```json
+    {
+      "moose.imageDownloader.path": "./img",
+      "moose.imageDownloader.overwriteExisting": true,
+      "moose.imageDownloader.skipLargeImages": false,
+      "moose.imageDownloader.maxImageSize": 5242880,
+      "moose.imageAlt.overwriteExisting": false
+    }
+    ```
 
 3. VSCode User Settings (Low Priority):
 
-   - Go to Settings (Ctrl+,)
-   - Search for "Markdown Moose"
-   - Configure available settings
+    - Go to Settings (Ctrl+,)
+    - Search for "Markdown Moose"
+    - Configure available settings
 
 ### Plugin Settings
 
