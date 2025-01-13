@@ -22,7 +22,7 @@ Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It us
 ### 📝 More Plugins Coming Soon
 
 > [!IMPORTANT]
-> **Next feature**: HTML to Markdown Plugin
+> **Next feature**: [HTML to Markdown Plugin](dev/ideas.md#next-up)
 
 Please feel free to suggest new features or create your own plugins.
 
