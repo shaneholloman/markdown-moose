@@ -10,6 +10,12 @@ Back to [README](../README.md)
   - Handle complex HTML structures and tables
   - Configurable options for conversion rules
 
+- [ ] **Pull from URL Plugin**
+  - Convert HTML to Markdown from a URL
+  - Configurable options for download and extraction
+  - Handle complex HTML structures and tables
+  - Save images locally and update links
+
 ## Already Implemented
 
 ### [x] Image Downloader Plugin
