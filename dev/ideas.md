@@ -2,6 +2,14 @@
 
 Back to [README](../README.md)
 
+## Next Up
+
+- [ ] **HTML to Markdown Plugin**
+  - Convert HTML to Markdown with a single command
+  - Preserve formatting, links, and images
+  - Handle complex HTML structures and tables
+  - Configurable options for conversion rules
+
 ## Already Implemented
 
 ### [x] Image Downloader Plugin
