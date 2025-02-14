@@ -18,20 +18,18 @@ Back to [README](../README.md)
 
 ## Already Implemented
 
-### [x] Image Downloader Plugin
+- [x] Image Downloader Plugin
+    - Automatically downloads images from your Markdown files
+    - Saves images locally in the same directory as your Markdown file
+    - Updates image links to use relative paths
+    - Shows download progress with a sleek progress indicator
 
-- Automatically downloads images from your Markdown files
-- Saves images locally in the same directory as your Markdown file
-- Updates image links to use relative paths
-- Shows download progress with a sleek progress indicator
-
-### [x]  Image Alt Plugin
-
-- Automatically generates meaningful alt text for images based on context
-- Uses nearest heading above the image as alt text
-- Falls back to page title or file type if no nearby heading
-- Handles duplicate images with numbered alt texts
-- Configurable to preserve or overwrite existing alt text
+- [x]  Image Alt Plugin
+    - Automatically generates meaningful alt text for images based on context
+    - Uses nearest heading above the image as alt text
+    - Falls back to page title or file type if no nearby heading
+    - Handles duplicate images with numbered alt texts
+    - Configurable to preserve or overwrite existing alt text
 
 ## Wish List
 
