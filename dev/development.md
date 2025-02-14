@@ -1,5 +1,49 @@
 # Markdown Moose Development Guide
 
+## Prerequisites
+
+### Node.js Setup
+
+This project uses Node.js for development. We recommend using Volta for Node.js version management:
+
+1. Install Volta (if not already installed):
+
+   ```bash
+   curl https://get.volta.sh | bash
+   ```
+
+2. Add Volta to your PATH:
+   - For bash/zsh, add to your ~/.bashrc or ~/.zshrc:
+
+     ```bash
+     export VOLTA_HOME="$HOME/.volta"
+     export PATH="$VOLTA_HOME/bin:$PATH"
+     ```
+
+   - Then either restart your terminal or run:
+
+     ```bash
+     source ~/.bashrc  # or ~/.zshrc
+     ```
+
+3. Install Node.js LTS:
+
+   ```bash
+   volta install node@lts
+   ```
+
+This will ensure you have the latest LTS version of Node.js installed and properly configured.
+
+### TypeScript Configuration
+
+The project requires specific TypeScript configuration for VSCode extension development:
+
+- The tsconfig.json must include 'dom' in the lib array for browser APIs
+- Node.js types are required for CommonJS module support
+- VSCode extension types are needed for the VSCode API
+
+These dependencies are included in package.json and the configuration is set in tsconfig.json.
+
 ## Understanding the Architecture
 
 ### Extension vs Plugins
