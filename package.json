@@ -30,6 +30,10 @@
       {
         "command": "markdown-moose.updateImageAlts",
         "title": "Moose: Update Image Alt Text"
+      },
+      {
+        "command": "markdown-moose.insertTable",
+        "title": "Moose: Insert Markdown Table"
       }
     ],
     "configuration": {

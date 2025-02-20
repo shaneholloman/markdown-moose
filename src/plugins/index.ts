@@ -57,6 +57,30 @@ export function loadPlugins(extensionPath?: string, outputChannel?: vscode.Outpu
         }
     }
 
+    
+    // Load tableGenPlugin
+    try {
+        log('Loading Table Generator plugin...');
+        const tableGenPlugin = require('./tableGenerator').default;
+
+        if (isValidPlugin(tableGenPlugin)) {
+            log(`Plugin ${tableGenPlugin.name} is valid, adding to list`);
+            plugins.push(tableGenPlugin);
+        } else {
+            const error = 'Invalid tableGen ';
+            outputChannel?.appendLine(`ERROR: ${error}`);
+            log(error);
+        }
+    } catch (error) {
+        const errorMessage = `Failed to load tableGen plugin: ${error}`;
+        outputChannel?.appendLine(`ERROR: ${errorMessage}`);
+        log(errorMessage);
+
+        if (error instanceof Error) {
+            outputChannel?.appendLine(`Stack trace: ${error.stack}`);
+        }
+    }
+
     return plugins;
 }
 
