@@ -3,7 +3,7 @@
  *
  * Prompts the user for 2 dimensions and then creates a table 
  *
- * @module TableGen
+ * @module TablePrettify
  */
 
 import * as vscode from 'vscode';
@@ -12,9 +12,9 @@ import { PluginSettings } from '../../types/settings';
 // TODO import { XXX, XXX } from './types';
 import { getSetting } from '../../utils/settings-loader';
 
-export class TableGen implements Plugin {
-    public name = 'TableGen';
-    public description = 'Inserts a markdown table at the cursor based on user input';
+export class TablePrettify implements Plugin {
+    public name = 'TablePrettify';
+    public description = 'Takes in a markdown table selection and formats it nice';
     public version = '1.0.0';
     public author = 'Max Gernhoefer';
     public commands: Command[];
@@ -27,16 +27,17 @@ export class TableGen implements Plugin {
     }
 
     constructor() {
-        this.insertTable = this.insertTable.bind(this);
+        this.prettyTable = this.prettyTable.bind(this);
 
         this.commands = [
             {
-                id: 'markdown-moose.insertTable',
-                title: 'Insert Markdown Table',
-                execute: this.insertTable
+                id: 'markdown-moose.TablePrettify',
+                title: 'Prettify Markdown Table',
+                execute: this.prettyTable
             }
         ];
 
+        //No settings for this plugin
         // this.settings = {
         //     overwriteExisting: {
         //         type: 'boolean',
@@ -50,7 +51,7 @@ export class TableGen implements Plugin {
         this.outputChannel = vscode.window.createOutputChannel('Markdown Moose');
         context.subscriptions.push(this.outputChannel);
 
-        this.log('Activating Table Generator plugin...');
+        this.log('Activating Table Prettier plugin...');
         for (const command of this.commands) {
             this.log(`Registering command: ${command.id}`);
             try {
@@ -69,7 +70,7 @@ export class TableGen implements Plugin {
                 throw error;
             }
         }
-        this.log('Table Generator plugin activated successfully');
+        this.log('Table Prettier plugin activated successfully');
     }
 
     public deactivate(): void {
@@ -78,12 +79,9 @@ export class TableGen implements Plugin {
 
     /**
      * Main command handler for inserting table
-     * Great reference for tables here:
-     * https://www.codecademy.com/resources/docs/markdown/tables
-     * 
      */
-    public async insertTable(): Promise<void> {
-        this.log('insertTable called');
+    public async prettyTable(): Promise<void> {
+        this.log('prettyTable called');
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
             vscode.window.showErrorMessage('Moose: No active editor');
@@ -92,41 +90,22 @@ export class TableGen implements Plugin {
     
         const edit = new vscode.WorkspaceEdit();
     
-        // Prompt the user for X x Y dimensions for the new table
-        const xInput = await vscode.window.showInputBox({
-            prompt: 'Enter the number of columns for the table',
-            validateInput: (value) => {
-                return isNaN(Number(value)) || Number(value) <= 0 ? 'Please enter a valid number greater than 0' : null;
-            }
-        });
+        //
+        // Meat of plugin goes here
+        //
     
-        const yInput = await vscode.window.showInputBox({
-            prompt: 'Enter the number of rows for the table',
-            validateInput: (value) => {
-                return isNaN(Number(value)) || Number(value) <= 0 ? 'Please enter a valid number greater than 0' : null;
-            }
-        });
-    
-        const x = xInput ? parseInt(xInput, 10) : 0;
-        const y = yInput ? parseInt(yInput, 10) : 0;
-    
-        if (x > 0 && y > 0) {
-            // Generate the table markdown
-            let table = '';
-            table += '| ' + '   |'.repeat(x) + '\n';
-            table += '| ' + '---|'.repeat(x) + '\n';
-            for (let i = 0; i < y; i++) {
-                table += '| ' + '   |'.repeat(x) + '\n';
-            }
-    
-            // Insert the table at the current cursor position
-            edit.insert(editor.document.uri, editor.selection.active, table);
-            await vscode.workspace.applyEdit(edit);
-            vscode.window.showInformationMessage(`Moose: Inserted table ${x}x${y}.`);
-        } else {
-            vscode.window.showInformationMessage('Moose: No dimensions given');
-        }
+        //Get user selection (whole table)
+
+        //Format nicely
+
+        //Replace table selected in document with nice table
+        const table = ''
+
+        edit.insert(editor.document.uri, editor.selection.active, table);
+        await vscode.workspace.applyEdit(edit);
+        vscode.window.showInformationMessage(`Moose: Formatted Table`);
+        
     }
 }
 
-export default new TableGen();
+export default new TablePrettify();

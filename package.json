@@ -34,6 +34,10 @@
       {
         "command": "markdown-moose.insertTable",
         "title": "Moose: Insert Markdown Table"
+      },
+      {
+        "command": "markdown-moose.TablePrettify",
+        "title": "Moose: Format/Prettify selected Markdown Table"
       }
     ],
     "configuration": {

@@ -81,6 +81,28 @@ export function loadPlugins(extensionPath?: string, outputChannel?: vscode.Outpu
         }
     }
 
+        // Load Table Prettier
+        try {
+            log('Loading Table Prettier plugin...');
+            const TablePrettifyPlugin = require('./tablePrettier').default;
+    
+            if (isValidPlugin(TablePrettifyPlugin)) {
+                log(`Plugin ${TablePrettifyPlugin.name} is valid, adding to list`);
+                plugins.push(TablePrettifyPlugin);
+            } else {
+                const error = 'Invalid TablePrettify ';
+                outputChannel?.appendLine(`ERROR: ${error}`);
+                log(error);
+            }
+        } catch (error) {
+            const errorMessage = `Failed to load TablePrettify plugin: ${error}`;
+            outputChannel?.appendLine(`ERROR: ${errorMessage}`);
+            log(errorMessage);
+    
+            if (error instanceof Error) {
+                outputChannel?.appendLine(`Stack trace: ${error.stack}`);
+            }
+        }
     return plugins;
 }
 
