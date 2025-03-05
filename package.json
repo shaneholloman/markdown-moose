@@ -37,7 +37,7 @@
       },
       {
         "command": "markdown-moose.TablePrettify",
-        "title": "Moose: Format/Prettify Markdown Tables in document"
+        "title": "Moose: Format/Prettify selected Markdown table"
       }
     ],
     "configuration": {

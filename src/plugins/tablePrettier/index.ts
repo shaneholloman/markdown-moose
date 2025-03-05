@@ -8,9 +8,6 @@
 
 import * as vscode from 'vscode';
 import { Plugin, Command } from '../../types';
-import { PluginSettings } from '../../types/settings';
-// TODO import { XXX, XXX } from './types';
-import { getSetting } from '../../utils/settings-loader';
 
 export class TablePrettify implements Plugin {
     public name = 'TablePrettify';
