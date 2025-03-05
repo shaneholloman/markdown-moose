@@ -89,21 +89,43 @@ export class TablePrettify implements Plugin {
         }
     
         const edit = new vscode.WorkspaceEdit();
-    
-        //
-        // Meat of plugin goes here
-        //
-    
-        //Get user selection (whole table)
+    const selection = editor.selection;
+    const selectedText = editor.document.getText(selection);
+    if (!selectedText.trim()) {
+        vscode.window.showErrorMessage('No table selected');
+        return;
+    }
 
-        //Format nicely
+    const lines = selectedText.split('\n').filter(line => line.includes('|'));
+    if (!lines.length) {
+        vscode.window.showErrorMessage('No table found in selection');
+        return;
+    }
 
-        //Replace table selected in document with nice table
-        const table = ''
+    // Parse rows and columns
+    const rows = lines.map(line => line.split('|').map(cell => cell.trim()));
+    const colCount = Math.max(...rows.map(row => row.length));
+    const colWidths = new Array(colCount).fill(0);
 
-        edit.insert(editor.document.uri, editor.selection.active, table);
-        await vscode.workspace.applyEdit(edit);
-        vscode.window.showInformationMessage(`Moose: Formatted Table`);
+    // Calculate max column width
+    rows.forEach(row => {
+        row.forEach((cell, i) => {
+            colWidths[i] = Math.max(colWidths[i], cell.length);
+        });
+    });
+
+    // Build new table string
+    const formattedLines = rows.map(row =>
+        row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')
+    );
+    const table = formattedLines.join('\n');
+
+    // Replace with prettified table
+    edit.delete(editor.document.uri, selection);
+    edit.insert(editor.document.uri, selection.start, table);
+
+    await vscode.workspace.applyEdit(edit);
+    vscode.window.showInformationMessage(`Moose: Formatted Table`);
         
     }
 }
