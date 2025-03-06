@@ -103,6 +103,29 @@ export function loadPlugins(extensionPath?: string, outputChannel?: vscode.Outpu
                 outputChannel?.appendLine(`Stack trace: ${error.stack}`);
             }
         }
+
+        // Load Excel to MD plugin
+        try {
+            log('Loading TableExcelToMD plugin...');
+            const TableExcelToMDPlugin = require('./tableExcelToMD').default;
+    
+            if (isValidPlugin(TableExcelToMDPlugin)) {
+                log(`Plugin ${TableExcelToMDPlugin.name} is valid, adding to list`);
+                plugins.push(TableExcelToMDPlugin);
+            } else {
+                const error = 'Invalid TableExcelToMD ';
+                outputChannel?.appendLine(`ERROR: ${error}`);
+                log(error);
+            }
+        } catch (error) {
+            const errorMessage = `Failed to load TableExcelToMD plugin: ${error}`;
+            outputChannel?.appendLine(`ERROR: ${errorMessage}`);
+            log(errorMessage);
+    
+            if (error instanceof Error) {
+                outputChannel?.appendLine(`Stack trace: ${error.stack}`);
+            }
+        }
     return plugins;
 }
 

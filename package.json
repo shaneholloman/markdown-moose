@@ -38,6 +38,10 @@
       {
         "command": "markdown-moose.TablePrettify",
         "title": "Moose: Format/Prettify selected Markdown table"
+      },
+      {
+        "command": "markdown-moose.TableExcelToMD",
+        "title": "Moose: Convert excel formatted table to Markdown (Tab delimited)"
       }
     ],
     "configuration": {
