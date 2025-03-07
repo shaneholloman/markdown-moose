@@ -6,6 +6,18 @@
  * @module TablePrettify
  */
 
+
+///TODO
+//
+// Make the table hyphens go across the whole column
+//
+// Like |---------|
+// not  | ---     |
+
+
+
+
+
 import * as vscode from 'vscode';
 import { Plugin, Command } from '../../types';
 
@@ -98,7 +110,7 @@ export class TablePrettify implements Plugin {
         vscode.window.showErrorMessage('No table found in selection');
         return;
     }
-
+    
     // Parse rows and columns
     const rows = lines.map(line => line.split('|').map(cell => cell.trim()));
     const colCount = Math.max(...rows.map(row => row.length));

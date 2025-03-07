@@ -37,7 +37,7 @@
       },
       {
         "command": "markdown-moose.TablePrettify",
-        "title": "Moose: Format/Prettify selected Markdown table"
+        "title": "Moose: Format selected Markdown table"
       },
       {
         "command": "markdown-moose.TableExcelToMD",
