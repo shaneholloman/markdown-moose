@@ -16,8 +16,6 @@
 
 
 
-
-
 import * as vscode from 'vscode';
 import { Plugin, Command } from '../../types';
 
@@ -124,9 +122,29 @@ export class TablePrettify implements Plugin {
     });
 
     // Build new table string
-    const formattedLines = rows.map(row =>
-        row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')
-    );
+    const formattedLines = rows.map((row) => {
+        // Check if this is a separator row (must contain hyphens)
+        const isSeparator = row.some(cell => cell.includes('-')) && 
+                           row.every(cell => !cell || /^[-:\s]+$/.test(cell));
+        
+        if (isSeparator) {
+            // For separator rows, create a cell with dashes that fills the column width
+            return row.map((cell, i) => {
+                // Preserve alignment colons if present
+                const hasLeftColon = cell.startsWith(':');
+                const hasRightColon = cell.endsWith(':');
+                const dashes = '-'.repeat(colWidths[i]);
+                
+                if (hasLeftColon && hasRightColon) return `:${dashes}:`;
+                if (hasLeftColon) return `:${dashes}`;
+                if (hasRightColon) return `${dashes}:`;
+                return dashes;
+            }).join('|');
+        } else {
+            // Normal row formatting
+            return row.map((cell, i) => cell.padEnd(colWidths[i])).join('|');
+        }
+    });
     const table = formattedLines.join('\n');
 
     // Replace with prettified table
