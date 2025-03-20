@@ -18,6 +18,9 @@
 
 import * as vscode from 'vscode';
 import { Plugin, Command } from '../../types';
+import { PluginSettings } from '../../types/settings';
+import { getSetting } from '../../utils/settings-loader';
+import { join } from 'path';
 
 export class TablePrettify implements Plugin {
     public name = 'TablePrettify';
@@ -25,7 +28,7 @@ export class TablePrettify implements Plugin {
     public version = '1.0.0';
     public author = 'Max Gernhoefer';
     public commands: Command[];
-    // public settings: PluginSettings;
+    public settings: PluginSettings;
     private outputChannel?: vscode.OutputChannel;
 
     private log(message: string) {
@@ -44,14 +47,14 @@ export class TablePrettify implements Plugin {
             }
         ];
 
-        //No settings for this plugin
-        // this.settings = {
-        //     overwriteExisting: {
-        //         type: 'boolean',
-        //         default: false,
-        //         description: 'Whether to overwrite existing alt text'
-        //     }
-        // };
+        //Add a space margin to a table header line row
+        this.settings = {
+            headerRowPadSpace: {
+                type: 'boolean',
+                default: false,
+                description: 'Pad hyphenated space by 1 in header seperator row'
+            }
+        };
     }
 
     public activate(context: vscode.ExtensionContext): void {
@@ -114,6 +117,17 @@ export class TablePrettify implements Plugin {
     const colCount = Math.max(...rows.map(row => row.length));
     const colWidths = new Array(colCount).fill(0);
 
+    
+    //load settings value
+    const document = editor.document;
+    const headerRowPadSpace = await getSetting<boolean>(
+        'imageAlt',
+        'headerRowPadSpace',
+        document,
+        false
+    );
+
+
     // Calculate max column width
     rows.forEach(row => {
         row.forEach((cell, i) => {
@@ -127,6 +141,12 @@ export class TablePrettify implements Plugin {
         const isSeparator = row.some(cell => cell.includes('-')) && 
                            row.every(cell => !cell || /^[-:\s]+$/.test(cell));
         
+        var joinCharacter = "|";
+        if(headerRowPadSpace) {
+            joinCharacter = " | "
+        }
+        if(true){
+        }
         if (isSeparator) {
             // For separator rows, create a cell with dashes that fills the column width
             return row.map((cell, i) => {
@@ -139,10 +159,10 @@ export class TablePrettify implements Plugin {
                 if (hasLeftColon) return `:${dashes}`;
                 if (hasRightColon) return `${dashes}:`;
                 return dashes;
-            }).join('|');
+            }).join(joinCharacter);
         } else {
             // Normal row formatting
-            return row.map((cell, i) => cell.padEnd(colWidths[i])).join('|');
+            return row.map((cell, i) => cell.padEnd(colWidths[i])).join(joinCharacter);
         }
     });
     const table = formattedLines.join('\n');
