@@ -23,18 +23,18 @@ This document outlines the process for publishing Markdown Moose to the Visual S
     - Sign in (create account if needed, can use GitHub account)
     - Click profile icon → ... → User Settings → Personal access tokens
     - Create new token:
-      - Name: VSCode Marketplace
-      - Organization: All accessible organizations
-      - Expiration: 1 year
-      - Scopes: Select "Custom defined"
-        1. Click "Show all scopes" at bottom
-        2. Expand "Marketplace"
-        3. Check ALL of these boxes:
-           - Acquire
-           - Manage
-           - Publish
-        4. Expand "User Profile"
-           - Check "Read" permission
+        - Name: VSCode Marketplace
+        - Organization: All accessible organizations
+        - Expiration: 1 year
+        - Scopes: Select "Custom defined"
+            1. Click "Show all scopes" at bottom
+            2. Expand "Marketplace"
+            3. Check ALL of these boxes:
+                - Acquire
+                - Manage
+                - Publish
+            4. Expand "User Profile"
+                - Check "Read" permission
     - Copy and save token securely (you can't view it again later)
 
     ![Onetime Setup](img/devlivery-0.png)
@@ -56,7 +56,7 @@ This document outlines the process for publishing Markdown Moose to the Visual S
 
     ```json
     {
-      "version": "x.x.x"
+        "version": "x.x.x"
     }
     ```
 

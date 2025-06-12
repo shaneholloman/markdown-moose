@@ -13,18 +13,19 @@ This project uses Node.js for development. We recommend using Volta for Node.js 
    ```
 
 2. Add Volta to your PATH:
+
    - For bash/zsh, add to your ~/.bashrc or ~/.zshrc:
 
-     ```bash
-     export VOLTA_HOME="$HOME/.volta"
-     export PATH="$VOLTA_HOME/bin:$PATH"
-     ```
+   ```bash
+   export VOLTA_HOME="$HOME/.volta"
+   export PATH="$VOLTA_HOME/bin:$PATH"
+   ```
 
    - Then either restart your terminal or run:
 
-     ```bash
-     source ~/.bashrc  # or ~/.zshrc
-     ```
+   ```bash
+   source ~/.bashrc  # or ~/.zshrc
+   ```
 
 3. Install Node.js LTS:
 
@@ -66,13 +67,13 @@ The plugin system currently requires manual registration in `src/plugins/index.t
 
    ```typescript
    try {
-       log('Loading my plugin...');
-       const myPlugin = require('./my-plugin-name').default;
-       if (isValidPlugin(myPlugin)) {
-           plugins.push(myPlugin);
-       }
+     log("Loading my plugin...");
+     const myPlugin = require("./my-plugin-name").default;
+     if (isValidPlugin(myPlugin)) {
+       plugins.push(myPlugin);
+     }
    } catch (error) {
-       // Error handling
+     // Error handling
    }
    ```
 
@@ -131,9 +132,9 @@ The relationship is hierarchical:
 ```txt
 Markdown Moose (Extension)
 └── Plugins
-    ├── Image Downloader (Built-in plugin)
-    ├── Your Plugin
-    └── Other Plugins...
+   ├── Image Downloader (Built-in plugin)
+   ├── Your Plugin
+   └── Other Plugins...
 ```
 
 ## Plugin Settings System
@@ -143,6 +144,7 @@ Markdown Moose (Extension)
 Markdown Moose implements a three-tier settings system with clear precedence:
 
 1. `.moose` Config File (Highest Priority)
+
    - JSON file in workspace root
    - Settings grouped by plugin name
    - Overrides all other settings
@@ -158,6 +160,7 @@ Markdown Moose implements a three-tier settings system with clear precedence:
      ```
 
 2. VSCode Workspace/User Settings (Medium Priority)
+
    - Standard VSCode settings
    - Settings prefixed with "moose.[pluginName]"
    - Example:
@@ -179,48 +182,51 @@ Markdown Moose implements a three-tier settings system with clear precedence:
 
    ```typescript
    export class MyPlugin implements Plugin {
-       public name = 'myPlugin';  // Used as settings namespace
-       public settings: PluginSettings = {
-           mySetting: {
-               type: 'string',
-               default: 'default value',
-               description: 'My setting description',
-               // Optional validations:
-               pattern: '^[a-z]+$',    // Regex pattern for strings
-               minimum: 0,             // For numbers
-               maximum: 100,           // For numbers
-               enum: ['a', 'b', 'c']   // For dropdowns
-           }
-       };
+     public name = "myPlugin"; // Used as settings namespace
+     public settings: PluginSettings = {
+       mySetting: {
+         type: "string",
+         default: "default value",
+         description: "My setting description",
+         // Optional validations:
+         pattern: "^[a-z]+$", // Regex pattern for strings
+         minimum: 0, // For numbers
+         maximum: 100, // For numbers
+         enum: ["a", "b", "c"], // For dropdowns
+       },
+     };
    }
    ```
 
 2. Access Settings in Code:
 
    ```typescript
-   import { getSetting } from '../../utils/settings-loader';
+   import { getSetting } from "../../utils/settings-loader";
 
    const value = await getSetting<string>(
-       'myPlugin',      // Plugin name
-       'mySetting',     // Setting key
-       document,        // VSCode document (for workspace settings)
-       'default value'  // Default value
+     "myPlugin", // Plugin name
+     "mySetting", // Setting key
+     document, // VSCode document (for workspace settings)
+     "default value" // Default value
    );
    ```
 
 ### Best Practices for Plugin Settings
 
 1. Naming:
+
    - Use camelCase for setting keys
    - Make names descriptive and specific
    - Match VSCode conventions
 
 2. Documentation:
+
    - Provide clear descriptions
    - Document default values
    - Explain setting interactions
 
 3. Validation:
+
    - Use appropriate types
    - Set reasonable min/max values
    - Provide patterns for strings
@@ -248,7 +254,7 @@ npm install
 
 #### Extension Core Changes
 
-If you're modifying the core extension (src/extension.ts or src/utils/*):
+If you're modifying the core extension (src/extension.ts or src/utils/\*):
 
 1. Make your changes
 2. Run `npm run compile` to build
@@ -299,6 +305,7 @@ For Plugins:
 For Image Downloader Plugin Specifically:
 
 1. Test Configuration:
+
    - [ ] VSCode settings work
    - [ ] Workspace settings override VSCode settings
    - [ ] .moose config overrides both
@@ -332,10 +339,12 @@ The new VSCode window that opens is called the "Extension Development Host":
 ### Common Issues
 
 1. Changes not appearing:
+
    - Ensure you ran `npm run compile`
    - Reload the Extension Development Host window
 
 2. Plugin not loading:
+
    - Check console for loading errors
    - Verify plugin structure matches interface
    - Ensure default export is configured
@@ -348,16 +357,19 @@ The new VSCode window that opens is called the "Extension Development Host":
 ## Best Practices
 
 1. Code Organization:
+
    - Keep plugins modular and focused
    - Use clear, descriptive names
    - Follow existing patterns
 
 2. Error Handling:
+
    - Always provide user feedback
    - Use VSCode notifications appropriately
    - Log errors for debugging
 
 3. Testing:
+
    - Test all configuration options
    - Test error cases
    - Test user feedback
@@ -387,10 +399,11 @@ The new VSCode window that opens is called the "Extension Development Host":
    Just the build and package:
 
    ```sh
-    npm run compile && vsce package
-    ```
+   npm run compile && vsce package
+   ```
 
    This command:
+
    - Compiles TypeScript using webpack
    - Creates the .vsix package
    - Moves it to the releases directory
@@ -438,6 +451,7 @@ npm run compile; vsce package; Remove-Item -ErrorAction SilentlyContinue .\relea
 To test the packaged .vsix file:
 
 1. Using VSCode UI:
+
    - Open VSCode
    - Go to Extensions view (Ctrl+Shift+X)
    - Click "..." (More Actions) at the top

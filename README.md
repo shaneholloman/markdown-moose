@@ -1,17 +1,17 @@
-# Markdown Moose 🦌
+# Markdown Moose
 
 Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It uses a plugin-based architecture where each feature is a plugin that can be loaded by the extension.
 
 ## Features Added
 
-### 📥 Image Downloader Plugin
+### Image Downloader Plugin
 
 - Automatically downloads images from your Markdown files
 - Saves images locally in the same directory as your Markdown file
 - Updates image links to use relative paths
 - Shows download progress with a sleek progress indicator
 
-### 🔤 Image Alt Plugin
+### Image Alt Plugin
 
 - Automatically generates meaningful alt text for images based on context
 - Uses nearest heading above the image as alt text
@@ -19,7 +19,7 @@ Markdown Moose is a VSCode Extension that enhances your Markdown workflow. It us
 - Handles duplicate images with numbered alt texts
 - Configurable to preserve or overwrite existing alt text
 
-### 📝 More Plugins Coming Soon
+### More Plugins Coming Soon
 
 > [!IMPORTANT]
 > **Next feature**: [HTML to Markdown Plugins](dev/ideas.md#next-up)
@@ -69,11 +69,11 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
 
     ```json
     {
-      "moose.imageDownloader.path": "./img",
-      "moose.imageDownloader.overwriteExisting": true,
-      "moose.imageDownloader.skipLargeImages": false,
-      "moose.imageDownloader.maxImageSize": 5242880,
-      "moose.imageAlt.overwriteExisting": false
+        "moose.imageDownloader.path": "./img",
+        "moose.imageDownloader.overwriteExisting": true,
+        "moose.imageDownloader.skipLargeImages": false,
+        "moose.imageDownloader.maxImageSize": 5242880,
+        "moose.imageAlt.overwriteExisting": false
     }
     ```
 
@@ -88,26 +88,26 @@ Markdown Moose uses a three-tier configuration system (in order of priority):
 #### Image Downloader Settings
 
 - `path`: Where to save downloaded images (relative to markdown file)
-  - Default: "./img"
-  - Examples: "./assets/images", ".", "./downloads"
+    - Default: "./img"
+    - Examples: "./assets/images", ".", "./downloads"
 
 - `overwriteExisting`: Whether to overwrite existing images
-  - Default: true
-  - Set to false to skip existing files
+    - Default: true
+    - Set to false to skip existing files
 
 - `skipLargeImages`: Whether to skip large image downloads
-  - Default: false
-  - Works with maxImageSize setting
+    - Default: false
+    - Works with maxImageSize setting
 
 - `maxImageSize`: Maximum allowed image size in bytes
-  - Default: 5242880 (5MB)
-  - Only used when skipLargeImages is true
+    - Default: 5242880 (5MB)
+    - Only used when skipLargeImages is true
 
 #### Image Alt Settings
 
 - `overwriteExisting`: Whether to overwrite existing alt text
-  - Default: false
-  - Set to true to update all images regardless of existing alt text
+    - Default: false
+    - Set to true to update all images regardless of existing alt text
 
 Notes:
 
@@ -262,4 +262,4 @@ Shane Holloman
 
 ---
 
-🦌 Happy Markdown editing with the Moose!
+Happy Markdown editing with the Moose!
