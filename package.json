@@ -30,6 +30,18 @@
       {
         "command": "markdown-moose.updateImageAlts",
         "title": "Moose: Update Image Alt Text"
+      },
+      {
+        "command": "markdown-moose.insertTable",
+        "title": "Moose: Insert Markdown Table"
+      },
+      {
+        "command": "markdown-moose.TablePrettify",
+        "title": "Moose: Format selected Markdown table"
+      },
+      {
+        "command": "markdown-moose.TableExcelToMD",
+        "title": "Moose: Convert excel formatted table to Markdown (Tab delimited)"
       }
     ],
     "configuration": {
