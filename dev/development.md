@@ -449,7 +449,7 @@ To test the packaged .vsix file:
 
 - Check existing issues on GitHub
 - Create a new issue with:
-  - Clear description
-  - Steps to reproduce
-  - Expected vs actual behavior
-  - VSCode and extension version
+    - Clear description
+    - Steps to reproduce
+    - Expected vs actual behavior
+    - VSCode and extension version

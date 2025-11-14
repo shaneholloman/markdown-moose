@@ -41,6 +41,7 @@ The extension uses webpack to bundle all code into a single `dist/extension.js` 
 ### Extension Entry Point
 
 `src/extension.ts` - Core extension activation/deactivation. On activation:
+
 1. Creates output channel for logging
 2. Loads plugins via `loadPlugins()` from `src/plugins/index.ts`
 3. Registers plugin settings with SettingsRegistry
