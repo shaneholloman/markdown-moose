@@ -2,38 +2,15 @@
 
 ## Prerequisites
 
-### Node.js Setup
+### Package Manager
 
-This project uses Node.js for development. We recommend using Volta for Node.js version management:
+This project uses pnpm for package management. Install pnpm if you don't have it:
 
-1. Install Volta (if not already installed):
+```sh
+npm install -g pnpm
+```
 
-   ```bash
-   curl https://get.volta.sh | bash
-   ```
-
-2. Add Volta to your PATH:
-
-   - For bash/zsh, add to your ~/.bashrc or ~/.zshrc:
-
-   ```bash
-   export VOLTA_HOME="$HOME/.volta"
-   export PATH="$VOLTA_HOME/bin:$PATH"
-   ```
-
-   - Then either restart your terminal or run:
-
-   ```bash
-   source ~/.bashrc  # or ~/.zshrc
-   ```
-
-3. Install Node.js LTS:
-
-   ```bash
-   volta install node@lts
-   ```
-
-This will ensure you have the latest LTS version of Node.js installed and properly configured.
+Or use alternative installation methods from <https://pnpm.io/installation>
 
 ### TypeScript Configuration
 
@@ -247,7 +224,7 @@ git clone https://github.com/shaneholloman/markdown-moose
 cd markdown-moose
 
 # Install dependencies
-npm install
+pnpm install
 ```
 
 ### 2. Making Changes
@@ -257,7 +234,7 @@ npm install
 If you're modifying the core extension (src/extension.ts or src/utils/\*):
 
 1. Make your changes
-2. Run `npm run compile` to build
+2. Run `pnpm run compile` to build
 3. Test using the methods below
 
 #### Plugin Changes
@@ -265,7 +242,7 @@ If you're modifying the core extension (src/extension.ts or src/utils/\*):
 If you're modifying an existing plugin or creating a new one:
 
 1. Make changes in `src/plugins/your-plugin-name/`
-2. Run `npm run compile` to build
+2. Run `pnpm run compile` to build
 3. Test using the methods below
 
 ### 3. Testing Your Changes
@@ -279,7 +256,7 @@ If you're modifying an existing plugin or creating a new one:
 
 #### Method 2: Manual Installation
 
-1. Run `npm run compile`
+1. Run `pnpm run compile`
 2. Copy the entire project to:
    - Windows: `%USERPROFILE%\.vscode\extensions\markdown-moose`
    - macOS/Linux: `~/.vscode/extensions/markdown-moose`
@@ -340,7 +317,7 @@ The new VSCode window that opens is called the "Extension Development Host":
 
 1. Changes not appearing:
 
-   - Ensure you ran `npm run compile`
+   - Ensure you ran `pnpm run compile`
    - Reload the Extension Development Host window
 
 2. Plugin not loading:
@@ -386,20 +363,20 @@ The new VSCode window that opens is called the "Extension Development Host":
 1. Install dependencies and build tools:
 
    ```sh
-   npm install
-   npm install -g @vscode/vsce
+   pnpm install
+   pnpm install -g @vscode/vsce
    ```
 
 2. Build, package, and install for testing (all-in-one command):
 
    ```sh
-   npm run compile && vsce package && del releases\markdown-moose-0.2.1.vsix && move markdown-moose-0.2.1.vsix releases\ && code --install-extension ./releases/markdown-moose-0.2.1.vsix
+   pnpm run compile && vsce package && del releases\markdown-moose-0.2.1.vsix && move markdown-moose-0.2.1.vsix releases\ && code --install-extension ./releases/markdown-moose-0.2.1.vsix
    ```
 
    Just the build and package:
 
    ```sh
-   npm run compile && vsce package
+   pnpm run compile && vsce package
    ```
 
    This command:
@@ -445,7 +422,7 @@ To modify package contents, edit .vscodeignore.
 ### Installing the Packaged Extension
 
 ```powershell
-npm run compile; vsce package; Remove-Item -ErrorAction SilentlyContinue .\releases\markdown-moose-0.2.1.vsix; Move-Item -Force markdown-moose-0.2.1.vsix .\releases\; code --install-extension .\releases\markdown-moose-0.2.1.vsix
+pnpm run compile; vsce package; Remove-Item -ErrorAction SilentlyContinue .\releases\markdown-moose-0.2.1.vsix; Move-Item -Force markdown-moose-0.2.1.vsix .\releases\; code --install-extension .\releases\markdown-moose-0.2.1.vsix
 ```
 
 To test the packaged .vsix file:

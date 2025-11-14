@@ -4,7 +4,7 @@ This document outlines the process for publishing Markdown Moose to the Visual S
 
 ## Prerequisites
 
-1. Node.js and npm installed
+1. Node.js and pnpm installed
 2. A free Azure DevOps account
 3. Your extension code ready for release
 4. A GitHub repository (already set up at <https://github.com/shaneholloman/markdown-moose>)
@@ -14,7 +14,7 @@ This document outlines the process for publishing Markdown Moose to the Visual S
 1. Install vsce (VS Code Extension Manager):
 
     ```sh
-    npm install -g @vscode/vsce
+    pnpm install -g @vscode/vsce
     ```
 
 2. Get Personal Access Token (PAT):

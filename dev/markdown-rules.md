@@ -1611,7 +1611,7 @@ echo Hello world
 To fix this, add a language specifier to the code block:
 
 ````markdown
-```bash
+```sh
 #!/bin/bash
 echo Hello world
 ```
